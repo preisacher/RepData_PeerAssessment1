@@ -1,15 +1,11 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 # Reproducible Research
 
 ## Peer Assignment 1
 
-```{r, echo=TRUE}
+
+```r
 # get the library I will need for the xyplot at the end of this document
 library(lattice)
 
@@ -21,32 +17,34 @@ aggregatedActivity <- aggregate(steps ~ date,
                                 data = activity, 
                                 sum, 
                                 na.rm = TRUE)
-
 ```
 
-```{r computemeanmedian,echo=TRUE}
+
+```r
 activityMean <- format(round(mean(aggregatedActivity$steps),0), 
                        scientific=FALSE)
 activityMedian <- median(aggregatedActivity$steps)
-
 ```
 
-#### The mean of the data set is: **`r activityMean`**. 
+#### The mean of the data set is: **10766**. 
 
-#### The median of the data set is: **`r activityMedian`**.
+#### The median of the data set is: **10765**.
 
 ### **The Historgram that is aggregated by day**
-```{r, echo=TRUE}
 
+```r
 hist(aggregatedActivity$steps, 
      main = "Total steps by day", 
      xlab = "day", 
      col = "pink")
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
+
 ### **What is the average daily activity pattern?**
 ### To answer that question, this is my Time series averaged accross all intervals for the duration
-```{r, echo=TRUE}
+
+```r
 timeSeries <- tapply(activity$steps, 
                      activity$interval,
                      mean,
@@ -60,25 +58,29 @@ plot(row.names(timeSeries),
      col = "dark green")
 ```
 
-```{r computemax, echo=TRUE}
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
+
+
+```r
 intervalForMaxSteps <- names(which.max(timeSeries))
 maxNumberOfSteps <- round(timeSeries[[which.max(timeSeries)]],0)
 ```
 
-### The interval with the maximum number of steps on average is **`r intervalForMaxSteps`** and they took and average of **`r maxNumberOfSteps`** steps during that interval.
+### The interval with the maximum number of steps on average is **835** and they took and average of **206** steps during that interval.
 
 #### **Inputting missing values**
 #### The following code shows how I calculate the number of NA (unknown) values:
-```{r unknownValues, echo=TRUE}
+
+```r
 NAvalues <- sum(is.na(activity))
 ```
-### The number of NA values (null/unknown) in this dataset is: **`r NAvalues`**.
+### The number of NA values (null/unknown) in this dataset is: **2304**.
 
 ### This is how I replace all the missing values with the mean of the inteval it belongs to.
 ### I then display the historgram built from this data set with the replacement values.
 
-```{r replaceNA, echo=TRUE}
 
+```r
 #
 # First get the average steps per interval
 # I will use this average to fill in for the missing values
@@ -116,29 +118,31 @@ hist(aggregatedActivity2$steps,
      main = "Total steps by day", 
      xlab = "day", 
      col = "purple")
-
 ```
 
+![](PA1_template_files/figure-html/replaceNA-1.png) 
+
 #### This is how I calculate the mean and median for the new dataset
-```{r computemeanmedian2,echo=TRUE}
+
+```r
 activityMean2 <- format(round(mean(aggregatedActivity2$steps),0), 
                        scientific=FALSE)
 activityMedian2 <- format(round(median(aggregatedActivity2$steps),0),
                           scientific=FALSE)
-
 ```
 
 
-#### The mean of the new data set is: **`r activityMean2`** compared to **`r activityMean`** from the original (**the same**). 
+#### The mean of the new data set is: **10766** compared to **10766** from the original (**the same**). 
 
-#### The median of the new data set is: **`r activityMedian2`** compared to **`r activityMedian`** from the original (**marginally higher**).
+#### The median of the new data set is: **10766** compared to **10765** from the original (**marginally higher**).
 
 #### Are there differences in activity patterns between weekdays and weekends? **Yes**, the weekend has **more** consistent steps taken over more time.
 
 #### For this part the weekdays() function may be of some help here. Use the dataset with the filled-in missing values for this part.
 
 #### This is how I create a new factor variable in the dataset with two categories for week days and week ends.
-```{r , echo=TRUE}
+
+```r
 # I like this weekdays function... very easy to use...
 #
 day <- weekdays(newActivity$date)
@@ -169,3 +173,5 @@ names(stepsByDay) <- c("interval", "category", "steps")
          xlab = "Interval", 
          ylab = "Number of Steps")
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
